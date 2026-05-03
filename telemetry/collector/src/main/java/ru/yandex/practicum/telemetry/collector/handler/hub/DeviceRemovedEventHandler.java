@@ -1,13 +1,13 @@
-package ru.yandex.practicum.telemetry.collector.service.handler.hub;
+package ru.yandex.practicum.telemetry.collector.handler.hub;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.DeviceRemovedEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
+import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
 import ru.yandex.practicum.telemetry.collector.model.hub.DeviceRemovedEvent;
 import ru.yandex.practicum.telemetry.collector.model.hub.HubEvent;
 import ru.yandex.practicum.telemetry.collector.model.hub.HubEventType;
-import ru.yandex.practicum.telemetry.collector.service.handler.TelemetryProducer;
 
 @Component
 public class DeviceRemovedEventHandler extends BaseHubHandler<DeviceRemovedEventAvro> {

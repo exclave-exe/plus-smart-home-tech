@@ -1,8 +1,8 @@
-package ru.yandex.practicum.telemetry.collector.service.handler.sensor;
+package ru.yandex.practicum.telemetry.collector.handler.sensor;
 
 import org.apache.avro.specific.SpecificRecordBase;
+import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
 import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEvent;
-import ru.yandex.practicum.telemetry.collector.service.handler.TelemetryProducer;
 
 public abstract class BaseSensorHandler<V extends SpecificRecordBase> implements SensorHandler {
 

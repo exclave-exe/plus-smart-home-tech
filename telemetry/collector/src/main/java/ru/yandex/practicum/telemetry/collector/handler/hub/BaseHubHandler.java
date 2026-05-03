@@ -1,8 +1,8 @@
-package ru.yandex.practicum.telemetry.collector.service.handler.hub;
+package ru.yandex.practicum.telemetry.collector.handler.hub;
 
 import org.apache.avro.specific.SpecificRecordBase;
+import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
 import ru.yandex.practicum.telemetry.collector.model.hub.HubEvent;
-import ru.yandex.practicum.telemetry.collector.service.handler.TelemetryProducer;
 
 public abstract class BaseHubHandler<V extends SpecificRecordBase> implements HubHandler {
 

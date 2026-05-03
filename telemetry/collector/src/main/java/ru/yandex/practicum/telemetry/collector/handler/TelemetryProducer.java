@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.collector.service.handler;
+package ru.yandex.practicum.telemetry.collector.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.avro.specific.SpecificRecordBase;

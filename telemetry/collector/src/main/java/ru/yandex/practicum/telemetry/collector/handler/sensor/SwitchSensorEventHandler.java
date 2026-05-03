@@ -1,13 +1,13 @@
-package ru.yandex.practicum.telemetry.collector.service.handler.sensor;
+package ru.yandex.practicum.telemetry.collector.handler.sensor;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SwitchSensorAvro;
+import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
 import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEvent;
 import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEventType;
 import ru.yandex.practicum.telemetry.collector.model.sensor.SwitchSensorEvent;
-import ru.yandex.practicum.telemetry.collector.service.handler.TelemetryProducer;
 
 @Component
 public class SwitchSensorEventHandler extends BaseSensorHandler<SwitchSensorAvro> {
