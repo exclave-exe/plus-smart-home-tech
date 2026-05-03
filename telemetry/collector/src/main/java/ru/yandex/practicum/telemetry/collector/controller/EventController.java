@@ -8,24 +8,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.telemetry.collector.model.hub.HubEvent;
 import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEvent;
-import ru.yandex.practicum.telemetry.collector.service.HubService;
-import ru.yandex.practicum.telemetry.collector.service.SensorService;
+import ru.yandex.practicum.telemetry.collector.service.EventService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/events")
 public class EventController {
 
-    private final SensorService sensorService;
-    private final HubService hubService;
+    private final EventService eventService;
 
     @PostMapping("/sensors")
     public void collectHubEvent(@Valid @RequestBody SensorEvent sensorEvent) {
-        sensorService.handle(sensorEvent);
+        eventService.handleSensor(sensorEvent);
     }
 
     @PostMapping("/hubs")
     public void collectHubEvent(@Valid @RequestBody HubEvent hubEvent) {
-        hubService.handle(hubEvent);
+        eventService.handleHub(hubEvent);
     }
 }
