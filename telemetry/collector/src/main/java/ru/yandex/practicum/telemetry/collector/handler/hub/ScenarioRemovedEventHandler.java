@@ -2,12 +2,13 @@ package ru.yandex.practicum.telemetry.collector.handler.hub;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
+import ru.yandex.practicum.grpc.telemetry.event.ScenarioRemovedEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ScenarioRemovedEventAvro;
 import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
-import ru.yandex.practicum.telemetry.collector.model.hub.HubEvent;
-import ru.yandex.practicum.telemetry.collector.model.hub.HubEventType;
-import ru.yandex.practicum.telemetry.collector.model.hub.ScenarioRemovedEvent;
+
+import java.time.Instant;
 
 @Component
 public class ScenarioRemovedEventHandler extends BaseHubHandler<ScenarioRemovedEventAvro> {
@@ -18,12 +19,14 @@ public class ScenarioRemovedEventHandler extends BaseHubHandler<ScenarioRemovedE
     }
 
     @Override
-    public void handle(HubEvent hubEvent) {
-        ScenarioRemovedEventAvro scenarioRemovedEventAvro = mapToAvro(hubEvent);
+    public void handle(HubEventProto hubEventProto) {
+        ScenarioRemovedEventAvro scenarioRemovedEventAvro = mapToAvro(hubEventProto);
 
         HubEventAvro hubEventAvro = HubEventAvro.newBuilder()
-                .setHubId(hubEvent.getHubId())
-                .setTimestamp(hubEvent.getTimestamp())
+                .setHubId(hubEventProto.getHubId())
+                .setTimestamp(Instant.ofEpochSecond(
+                        hubEventProto.getTimestamp().getSeconds(),
+                        hubEventProto.getTimestamp().getNanos()))
                 .setPayload(scenarioRemovedEventAvro)
                 .build();
 
@@ -31,16 +34,17 @@ public class ScenarioRemovedEventHandler extends BaseHubHandler<ScenarioRemovedE
     }
 
     @Override
-    protected ScenarioRemovedEventAvro mapToAvro(HubEvent hubEvent) {
-        ScenarioRemovedEvent scenarioRemovedEvent = (ScenarioRemovedEvent) hubEvent;
+    protected ScenarioRemovedEventAvro mapToAvro(HubEventProto hubEventProto) {
+        ScenarioRemovedEventProto scenarioRemovedEventProto = hubEventProto.getScenarioRemoved();
 
         return ScenarioRemovedEventAvro.newBuilder()
-                .setName(scenarioRemovedEvent.getName())
+                .setName(scenarioRemovedEventProto.getName())
                 .build();
     }
 
     @Override
-    public HubEventType getType() {
-        return HubEventType.SCENARIO_REMOVED;
+    public HubEventProto.PayloadCase getType() {
+        return HubEventProto.PayloadCase.SCENARIO_REMOVED;
     }
+
 }
