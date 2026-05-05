@@ -2,31 +2,33 @@ package ru.yandex.practicum.telemetry.collector.handler.hub;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
+import ru.yandex.practicum.grpc.telemetry.event.ScenarioAddedEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ScenarioAddedEventAvro;
 import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
 import ru.yandex.practicum.telemetry.collector.handler.hub.maper.HubMapper;
-import ru.yandex.practicum.telemetry.collector.model.hub.HubEvent;
-import ru.yandex.practicum.telemetry.collector.model.hub.HubEventType;
-import ru.yandex.practicum.telemetry.collector.model.hub.ScenarioAddedEvent;
 
+import java.time.Instant;
 import java.util.stream.Collectors;
 
 @Component
 public class ScenarioAddedEventHandler extends BaseHubHandler<ScenarioAddedEventAvro> {
 
     protected ScenarioAddedEventHandler(@Value("${kafka.topic.telemetry.hubs-topic}") String topic,
-                                        TelemetryProducer producer) {
-        super(topic, producer);
+                                        TelemetryProducer telemetryProducer) {
+        super(topic, telemetryProducer);
     }
 
     @Override
-    public void handle(HubEvent hubEvent) {
-        ScenarioAddedEventAvro scenarioAddedEventAvro = mapToAvro(hubEvent);
+    public void handle(HubEventProto hubEventProto) {
+        ScenarioAddedEventAvro scenarioAddedEventAvro = mapToAvro(hubEventProto);
 
         HubEventAvro hubEventAvro = HubEventAvro.newBuilder()
-                .setHubId(hubEvent.getHubId())
-                .setTimestamp(hubEvent.getTimestamp())
+                .setHubId(hubEventProto.getHubId())
+                .setTimestamp(Instant.ofEpochSecond(
+                        hubEventProto.getTimestamp().getSeconds(),
+                        hubEventProto.getTimestamp().getNanos()))
                 .setPayload(scenarioAddedEventAvro)
                 .build();
 
@@ -34,22 +36,23 @@ public class ScenarioAddedEventHandler extends BaseHubHandler<ScenarioAddedEvent
     }
 
     @Override
-    protected ScenarioAddedEventAvro mapToAvro(HubEvent hubEvent) {
-        ScenarioAddedEvent scenarioAddedEvent = (ScenarioAddedEvent) hubEvent;
+    protected ScenarioAddedEventAvro mapToAvro(HubEventProto hubEventProto) {
+        ScenarioAddedEventProto scenarioAddedEventProto = hubEventProto.getScenarioAdded();
 
         return ScenarioAddedEventAvro.newBuilder()
-                .setName(scenarioAddedEvent.getName())
-                .setActions(scenarioAddedEvent.getActions().stream()
+                .setName(scenarioAddedEventProto.getName())
+                .setActions(scenarioAddedEventProto.getActionList().stream()
                         .map(HubMapper::mapToDeviceActionAvro)
                         .collect(Collectors.toList()))
-                .setConditions(scenarioAddedEvent.getConditions().stream()
+                .setConditions(scenarioAddedEventProto.getConditionList().stream()
                         .map(HubMapper::mapToScenarioConditionAvro)
                         .collect(Collectors.toList()))
                 .build();
     }
 
     @Override
-    public HubEventType getType() {
-        return HubEventType.SCENARIO_ADDED;
+    public HubEventProto.PayloadCase getType() {
+        return HubEventProto.PayloadCase.SCENARIO_ADDED;
     }
+
 }

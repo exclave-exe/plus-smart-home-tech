@@ -1,64 +1,77 @@
 package ru.yandex.practicum.telemetry.collector.handler.hub.maper;
 
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.grpc.telemetry.event.*;
 import ru.yandex.practicum.kafka.telemetry.event.*;
-import ru.yandex.practicum.telemetry.collector.model.hub.*;
+
 
 @Component
 public class HubMapper {
 
-    public static DeviceTypeAvro mapToDeviceTypeAvro(DeviceType deviceType) {
-        return switch (deviceType) {
-            case DeviceType.MOTION_SENSOR -> DeviceTypeAvro.MOTION_SENSOR;
-            case DeviceType.TEMPERATURE_SENSOR -> DeviceTypeAvro.TEMPERATURE_SENSOR;
-            case DeviceType.LIGHT_SENSOR -> DeviceTypeAvro.LIGHT_SENSOR;
-            case DeviceType.CLIMATE_SENSOR -> DeviceTypeAvro.CLIMATE_SENSOR;
-            case DeviceType.SWITCH_SENSOR -> DeviceTypeAvro.SWITCH_SENSOR;
+    public static DeviceTypeAvro mapToDeviceTypeAvro(DeviceTypeProto deviceTypeProto) {
+        return switch (deviceTypeProto) {
+            case DeviceTypeProto.MOTION_SENSOR -> DeviceTypeAvro.MOTION_SENSOR;
+            case DeviceTypeProto.TEMPERATURE_SENSOR -> DeviceTypeAvro.TEMPERATURE_SENSOR;
+            case DeviceTypeProto.LIGHT_SENSOR -> DeviceTypeAvro.LIGHT_SENSOR;
+            case DeviceTypeProto.CLIMATE_SENSOR -> DeviceTypeAvro.CLIMATE_SENSOR;
+            case DeviceTypeProto.SWITCH_SENSOR -> DeviceTypeAvro.SWITCH_SENSOR;
+            case DeviceTypeProto.UNRECOGNIZED -> null;
         };
     }
 
-    public static DeviceActionAvro mapToDeviceActionAvro(DeviceAction deviceAction) {
+    public static DeviceActionAvro mapToDeviceActionAvro(DeviceActionProto deviceActionProto) {
         return DeviceActionAvro.newBuilder()
-                .setSensorId(deviceAction.getSensorId())
-                .setType(mapToActionTypeAvro(deviceAction.getType()))
-                .setValue(deviceAction.getValue())
+                .setSensorId(deviceActionProto.getSensorId())
+                .setType(mapToActionTypeAvro(deviceActionProto.getType()))
+                .setValue(deviceActionProto.getValue())
                 .build();
     }
 
-    public static ScenarioConditionAvro mapToScenarioConditionAvro(ScenarioCondition scenarioCondition) {
+    private static ActionTypeAvro mapToActionTypeAvro(ActionTypeProto actionTypeProto) {
+        return switch (actionTypeProto) {
+            case ActionTypeProto.ACTIVATE -> ActionTypeAvro.ACTIVATE;
+            case ActionTypeProto.DEACTIVATE -> ActionTypeAvro.DEACTIVATE;
+            case ActionTypeProto.INVERSE -> ActionTypeAvro.INVERSE;
+            case ActionTypeProto.SET_VALUE -> ActionTypeAvro.SET_VALUE;
+            case ActionTypeProto.UNRECOGNIZED -> null;
+        };
+    }
+
+    public static ScenarioConditionAvro mapToScenarioConditionAvro(ScenarioConditionProto scenarioConditionProto) {
+        Object value = null;
+
+        if (scenarioConditionProto.hasIntValue()) {
+            value = scenarioConditionProto.getIntValue();
+        } else if (scenarioConditionProto.hasBoolValue()) {
+            value = scenarioConditionProto.getBoolValue();
+        }
+
         return ScenarioConditionAvro.newBuilder()
-                .setSensorId(scenarioCondition.getSensorId())
-                .setType(mapToConditionTypeAvro(scenarioCondition.getType()))
-                .setOperation(mapToConditionOperationAvro(scenarioCondition.getOperation()))
-                .setValue(scenarioCondition.getValue())
+                .setSensorId(scenarioConditionProto.getSensorId())
+                .setType(mapToConditionTypeAvro(scenarioConditionProto.getType()))
+                .setOperation(mapToConditionOperationAvro(scenarioConditionProto.getOperation()))
+                .setValue(value)
                 .build();
     }
 
-    private static ActionTypeAvro mapToActionTypeAvro(ActionType actionType) {
-        return switch (actionType) {
-            case ActionType.ACTIVATE -> ActionTypeAvro.ACTIVATE;
-            case ActionType.DEACTIVATE -> ActionTypeAvro.DEACTIVATE;
-            case ActionType.INVERSE -> ActionTypeAvro.INVERSE;
-            case ActionType.SET_VALUE -> ActionTypeAvro.SET_VALUE;
+    private static ConditionTypeAvro mapToConditionTypeAvro(ConditionTypeProto conditionTypeProto) {
+        return switch (conditionTypeProto) {
+            case ConditionTypeProto.MOTION -> ConditionTypeAvro.MOTION;
+            case ConditionTypeProto.LUMINOSITY -> ConditionTypeAvro.LUMINOSITY;
+            case ConditionTypeProto.SWITCH -> ConditionTypeAvro.SWITCH;
+            case ConditionTypeProto.TEMPERATURE -> ConditionTypeAvro.TEMPERATURE;
+            case ConditionTypeProto.CO2LEVEL -> ConditionTypeAvro.CO2LEVEL;
+            case ConditionTypeProto.HUMIDITY -> ConditionTypeAvro.HUMIDITY;
+            case ConditionTypeProto.UNRECOGNIZED -> null;
         };
     }
 
-    private static ConditionTypeAvro mapToConditionTypeAvro(ConditionType conditionType) {
-        return switch (conditionType) {
-            case ConditionType.MOTION -> ConditionTypeAvro.MOTION;
-            case ConditionType.LUMINOSITY -> ConditionTypeAvro.LUMINOSITY;
-            case ConditionType.SWITCH -> ConditionTypeAvro.SWITCH;
-            case ConditionType.TEMPERATURE -> ConditionTypeAvro.TEMPERATURE;
-            case ConditionType.CO2LEVEL -> ConditionTypeAvro.CO2LEVEL;
-            case ConditionType.HUMIDITY -> ConditionTypeAvro.HUMIDITY;
-        };
-    }
-
-    private static ConditionOperationAvro mapToConditionOperationAvro(ConditionOperation conditionOperation) {
-        return switch (conditionOperation) {
-            case ConditionOperation.EQUALS -> ConditionOperationAvro.EQUALS;
-            case ConditionOperation.GREATER_THAN -> ConditionOperationAvro.GREATER_THAN;
-            case ConditionOperation.LOWER_THAN -> ConditionOperationAvro.LOWER_THAN;
+    private static ConditionOperationAvro mapToConditionOperationAvro(ConditionOperationProto conditionOperationProto) {
+        return switch (conditionOperationProto) {
+            case ConditionOperationProto.EQUALS -> ConditionOperationAvro.EQUALS;
+            case ConditionOperationProto.GREATER_THAN -> ConditionOperationAvro.GREATER_THAN;
+            case ConditionOperationProto.LOWER_THAN -> ConditionOperationAvro.LOWER_THAN;
+            case ConditionOperationProto.UNRECOGNIZED -> null;
         };
     }
 }

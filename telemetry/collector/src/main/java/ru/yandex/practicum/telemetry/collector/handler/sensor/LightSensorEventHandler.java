@@ -2,12 +2,13 @@ package ru.yandex.practicum.telemetry.collector.handler.sensor;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.grpc.telemetry.event.LightSensorProto;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.LightSensorAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
-import ru.yandex.practicum.telemetry.collector.model.sensor.LightSensorEvent;
-import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEvent;
-import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEventType;
+
+import java.time.Instant;
 
 @Component
 public class LightSensorEventHandler extends BaseSensorHandler<LightSensorAvro> {
@@ -17,13 +18,15 @@ public class LightSensorEventHandler extends BaseSensorHandler<LightSensorAvro> 
     }
 
     @Override
-    public void handle(SensorEvent sensorEvent) {
-        LightSensorAvro lightSensorAvro = mapToAvro(sensorEvent);
+    public void handle(SensorEventProto sensorEventProto) {
+        LightSensorAvro lightSensorAvro = mapToAvro(sensorEventProto);
 
         SensorEventAvro sensorEventAvro = SensorEventAvro.newBuilder()
-                .setId(sensorEvent.getId())
-                .setHubId(sensorEvent.getHubId())
-                .setTimestamp(sensorEvent.getTimestamp())
+                .setId(sensorEventProto.getId())
+                .setHubId(sensorEventProto.getHubId())
+                .setTimestamp(Instant.ofEpochSecond(
+                        sensorEventProto.getTimestamp().getSeconds(),
+                        sensorEventProto.getTimestamp().getNanos()))
                 .setPayload(lightSensorAvro)
                 .build();
 
@@ -31,18 +34,18 @@ public class LightSensorEventHandler extends BaseSensorHandler<LightSensorAvro> 
     }
 
     @Override
-    protected LightSensorAvro mapToAvro(SensorEvent sensorEvent) {
-        LightSensorEvent lightSensorEvent = (LightSensorEvent) sensorEvent;
+    protected LightSensorAvro mapToAvro(SensorEventProto sensorEventProto) {
+        LightSensorProto lightSensorProto = sensorEventProto.getLightSensor();
 
         return LightSensorAvro.newBuilder()
-                .setLinkQuality(lightSensorEvent.getLinkQuality())
-                .setLuminosity(lightSensorEvent.getLuminosity())
+                .setLinkQuality(lightSensorProto.getLinkQuality())
+                .setLuminosity(lightSensorProto.getLuminosity())
                 .build();
     }
 
     @Override
-    public SensorEventType getType() {
-        return SensorEventType.LIGHT_SENSOR_EVENT;
+    public SensorEventProto.PayloadCase getType() {
+        return SensorEventProto.PayloadCase.LIGHT_SENSOR;
     }
 
 }

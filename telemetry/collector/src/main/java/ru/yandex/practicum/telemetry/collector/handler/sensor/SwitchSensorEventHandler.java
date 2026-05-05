@@ -2,12 +2,13 @@ package ru.yandex.practicum.telemetry.collector.handler.sensor;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
+import ru.yandex.practicum.grpc.telemetry.event.SwitchSensorProto;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SwitchSensorAvro;
 import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
-import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEvent;
-import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEventType;
-import ru.yandex.practicum.telemetry.collector.model.sensor.SwitchSensorEvent;
+
+import java.time.Instant;
 
 @Component
 public class SwitchSensorEventHandler extends BaseSensorHandler<SwitchSensorAvro> {
@@ -17,13 +18,15 @@ public class SwitchSensorEventHandler extends BaseSensorHandler<SwitchSensorAvro
     }
 
     @Override
-    public void handle(SensorEvent sensorEvent) {
-        SwitchSensorAvro switchSensorAvro = mapToAvro(sensorEvent);
+    public void handle(SensorEventProto sensorEventProto) {
+        SwitchSensorAvro switchSensorAvro = mapToAvro(sensorEventProto);
 
         SensorEventAvro sensorEventAvro = SensorEventAvro.newBuilder()
-                .setId(sensorEvent.getId())
-                .setHubId(sensorEvent.getHubId())
-                .setTimestamp(sensorEvent.getTimestamp())
+                .setId(sensorEventProto.getId())
+                .setHubId(sensorEventProto.getHubId())
+                .setTimestamp(Instant.ofEpochSecond(
+                        sensorEventProto.getTimestamp().getSeconds(),
+                        sensorEventProto.getTimestamp().getNanos()))
                 .setPayload(switchSensorAvro)
                 .build();
 
@@ -31,16 +34,17 @@ public class SwitchSensorEventHandler extends BaseSensorHandler<SwitchSensorAvro
     }
 
     @Override
-    protected SwitchSensorAvro mapToAvro(SensorEvent sensorEvent) {
-        SwitchSensorEvent switchSensorEvent = (SwitchSensorEvent) sensorEvent;
+    protected SwitchSensorAvro mapToAvro(SensorEventProto sensorEventProto) {
+        SwitchSensorProto switchSensorProto = sensorEventProto.getSwitchSensor();
 
         return SwitchSensorAvro.newBuilder()
-                .setState(switchSensorEvent.getState())
+                .setState(switchSensorProto.getState())
                 .build();
     }
 
     @Override
-    public SensorEventType getType() {
-        return SensorEventType.SWITCH_SENSOR_EVENT;
+    public SensorEventProto.PayloadCase getType() {
+        return SensorEventProto.PayloadCase.SWITCH_SENSOR;
     }
+
 }

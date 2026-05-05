@@ -2,13 +2,14 @@ package ru.yandex.practicum.telemetry.collector.handler.hub;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.grpc.telemetry.event.DeviceAddedEventProto;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.DeviceAddedEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
 import ru.yandex.practicum.telemetry.collector.handler.hub.maper.HubMapper;
-import ru.yandex.practicum.telemetry.collector.model.hub.DeviceAddedEvent;
-import ru.yandex.practicum.telemetry.collector.model.hub.HubEvent;
-import ru.yandex.practicum.telemetry.collector.model.hub.HubEventType;
+
+import java.time.Instant;
 
 @Component
 public class DeviceAddedEventHandler extends BaseHubHandler<DeviceAddedEventAvro> {
@@ -19,12 +20,14 @@ public class DeviceAddedEventHandler extends BaseHubHandler<DeviceAddedEventAvro
     }
 
     @Override
-    public void handle(HubEvent hubEvent) {
-        DeviceAddedEventAvro deviceAddedEventAvro = mapToAvro(hubEvent);
+    public void handle(HubEventProto hubEventProto) {
+        DeviceAddedEventAvro deviceAddedEventAvro = mapToAvro(hubEventProto);
 
         HubEventAvro hubEventAvro = HubEventAvro.newBuilder()
-                .setHubId(hubEvent.getHubId())
-                .setTimestamp(hubEvent.getTimestamp())
+                .setHubId(hubEventProto.getHubId())
+                .setTimestamp(Instant.ofEpochSecond(
+                        hubEventProto.getTimestamp().getSeconds(),
+                        hubEventProto.getTimestamp().getNanos()))
                 .setPayload(deviceAddedEventAvro)
                 .build();
 
@@ -32,17 +35,18 @@ public class DeviceAddedEventHandler extends BaseHubHandler<DeviceAddedEventAvro
     }
 
     @Override
-    protected DeviceAddedEventAvro mapToAvro(HubEvent hubEvent) {
-        DeviceAddedEvent deviceAddedEvent = (DeviceAddedEvent) hubEvent;
+    protected DeviceAddedEventAvro mapToAvro(HubEventProto hubEventProto) {
+        DeviceAddedEventProto deviceAddedEventProto = hubEventProto.getDeviceAdded();
 
         return DeviceAddedEventAvro.newBuilder()
-                .setId(deviceAddedEvent.getId())
-                .setType(HubMapper.mapToDeviceTypeAvro(deviceAddedEvent.getDeviceType()))
+                .setId(deviceAddedEventProto.getId())
+                .setType(HubMapper.mapToDeviceTypeAvro(deviceAddedEventProto.getType()))
                 .build();
     }
 
     @Override
-    public HubEventType getType() {
-        return HubEventType.DEVICE_ADDED;
+    public HubEventProto.PayloadCase getType() {
+        return HubEventProto.PayloadCase.DEVICE_ADDED;
     }
+
 }
