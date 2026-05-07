@@ -6,15 +6,15 @@ import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.TemperatureSensorProto;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.TemperatureSensorAvro;
-import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
+import ru.yandex.practicum.telemetry.collector.handler.CollectorProducer;
 
 import java.time.Instant;
 
 @Component
 public class TemperatureSensorEventHandler extends BaseSensorHandler<TemperatureSensorAvro> {
 
-    public TemperatureSensorEventHandler(@Value("${kafka.topic.telemetry.sensors-topic}") String topic, TelemetryProducer telemetryProducer) {
-        super(topic, telemetryProducer);
+    public TemperatureSensorEventHandler(@Value("${kafka.topic.telemetry.sensors-topic}") String topic, CollectorProducer collectorProducer) {
+        super(topic, collectorProducer);
     }
 
     @Override

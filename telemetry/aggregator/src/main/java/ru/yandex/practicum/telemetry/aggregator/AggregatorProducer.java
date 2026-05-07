@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.collector.handler;
+package ru.yandex.practicum.telemetry.aggregator;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.avro.specific.SpecificRecordBase;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TelemetryProducer {
+public class AggregatorProducer {
 
     private final KafkaTemplate<String, SpecificRecordBase> kafkaTemplate;
 

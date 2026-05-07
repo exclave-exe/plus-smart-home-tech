@@ -6,15 +6,15 @@ import ru.yandex.practicum.grpc.telemetry.event.MotionSensorProto;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.MotionSensorAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
-import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
+import ru.yandex.practicum.telemetry.collector.handler.CollectorProducer;
 
 import java.time.Instant;
 
 @Component
 public class MotionSensorEventHandler extends BaseSensorHandler<MotionSensorAvro> {
 
-    public MotionSensorEventHandler(@Value("${kafka.topic.telemetry.sensors-topic}") String topic, TelemetryProducer telemetryProducer) {
-        super(topic, telemetryProducer);
+    public MotionSensorEventHandler(@Value("${kafka.topic.telemetry.sensors-topic}") String topic, CollectorProducer collectorProducer) {
+        super(topic, collectorProducer);
     }
 
     @Override

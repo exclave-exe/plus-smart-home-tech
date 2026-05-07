@@ -6,7 +6,7 @@ import ru.yandex.practicum.grpc.telemetry.event.DeviceAddedEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.DeviceAddedEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
-import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
+import ru.yandex.practicum.telemetry.collector.handler.CollectorProducer;
 import ru.yandex.practicum.telemetry.collector.handler.hub.maper.HubMapper;
 
 import java.time.Instant;
@@ -15,8 +15,8 @@ import java.time.Instant;
 public class DeviceAddedEventHandler extends BaseHubHandler<DeviceAddedEventAvro> {
 
     public DeviceAddedEventHandler(@Value("${kafka.topic.telemetry.hubs-topic}") String topic,
-                                   TelemetryProducer telemetryProducer) {
-        super(topic, telemetryProducer);
+                                   CollectorProducer collectorProducer) {
+        super(topic, collectorProducer);
     }
 
     @Override
