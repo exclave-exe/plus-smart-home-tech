@@ -2,14 +2,14 @@ package ru.yandex.practicum.telemetry.collector.handler.sensor;
 
 import org.apache.avro.specific.SpecificRecordBase;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
-import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
+import ru.yandex.practicum.telemetry.collector.handler.CollectorProducer;
 
 public abstract class BaseSensorHandler<V extends SpecificRecordBase> implements SensorHandler {
 
     protected final String topic;
-    protected final TelemetryProducer producer;
+    protected final CollectorProducer producer;
 
-    protected BaseSensorHandler(String topic, TelemetryProducer producer) {
+    protected BaseSensorHandler(String topic, CollectorProducer producer) {
         this.topic = topic;
         this.producer = producer;
     }

@@ -6,7 +6,7 @@ import ru.yandex.practicum.grpc.telemetry.event.DeviceRemovedEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.DeviceRemovedEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
-import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
+import ru.yandex.practicum.telemetry.collector.handler.CollectorProducer;
 
 import java.time.Instant;
 
@@ -14,8 +14,8 @@ import java.time.Instant;
 public class DeviceRemovedEventHandler extends BaseHubHandler<DeviceRemovedEventAvro> {
 
     protected DeviceRemovedEventHandler(@Value("${kafka.topic.telemetry.hubs-topic}") String topic,
-                                        TelemetryProducer telemetryProducer) {
-        super(topic, telemetryProducer);
+                                        CollectorProducer collectorProducer) {
+        super(topic, collectorProducer);
     }
 
     @Override
