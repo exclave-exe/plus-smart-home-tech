@@ -18,10 +18,7 @@ public class BaseAvroDeserializer<T extends SpecificRecordBase> implements Deser
         this(DecoderFactory.get(), schema);
     }
 
-    public BaseAvroDeserializer(
-            DecoderFactory decoderFactory,
-            Schema schema
-    ) {
+    public BaseAvroDeserializer(DecoderFactory decoderFactory, Schema schema) {
         this.decoderFactory = decoderFactory;
         this.datumReader = new SpecificDatumReader<>(schema);
     }
@@ -29,9 +26,7 @@ public class BaseAvroDeserializer<T extends SpecificRecordBase> implements Deser
     @Override
     public T deserialize(String topic, byte[] data) {
 
-        if (data == null) {
-            return null;
-        }
+        if (data == null) return null;
 
         try {
             BinaryDecoder decoder = decoderFactory.binaryDecoder(data, null);

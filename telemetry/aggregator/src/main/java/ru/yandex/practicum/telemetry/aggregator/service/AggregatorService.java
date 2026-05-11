@@ -6,6 +6,7 @@ import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -16,52 +17,57 @@ public class AggregatorService {
 
     private final Map<String, SensorsSnapshotAvro> snapshots = new HashMap<>();
 
-    public Optional<SensorsSnapshotAvro> updateState(SensorEventAvro sensorEventAvro) {
+    public Optional<SensorsSnapshotAvro> updateState(SensorEventAvro event) {
 
-        String sensorId = sensorEventAvro.getId();
-        String hubId = sensorEventAvro.getHubId();
+        String hubId = event.getHubId();
+        String sensorId = event.getId();
+        Instant timestamp = event.getTimestamp();
+        Object payload = event.getPayload();
 
-        SensorsSnapshotAvro sensorsSnapshotAvro = snapshots.get(hubId);
+        SensorsSnapshotAvro currentSnapshot = snapshots.get(hubId);
+        if (currentSnapshot == null) {
+            Map<String, SensorStateAvro> states = new HashMap<>();
 
-        if (sensorsSnapshotAvro == null) {
-            sensorsSnapshotAvro = createSensorSnapshotAvro(sensorEventAvro);
-            snapshots.put(hubId, sensorsSnapshotAvro);
-            return Optional.of(sensorsSnapshotAvro);
+            states.put(sensorId, SensorStateAvro.newBuilder()
+                    .setTimestamp(timestamp)
+                    .setData(payload)
+                    .build());
+
+            SensorsSnapshotAvro snapshot = SensorsSnapshotAvro.newBuilder()
+                    .setHubId(hubId)
+                    .setTimestamp(timestamp)
+                    .setSensorsState(states)
+                    .build();
+
+            snapshots.put(hubId, snapshot);
+            return Optional.of(snapshot);
         }
 
-        SensorStateAvro oldSensorStateAvro = sensorsSnapshotAvro.getSensorsState().get(sensorId);
-        if (oldSensorStateAvro != null) {
-            if (oldSensorStateAvro.getTimestamp().isAfter(sensorEventAvro.getTimestamp())) {
+        SensorStateAvro previousState = currentSnapshot.getSensorsState().get(sensorId);
+        if (previousState != null) {
+            if (previousState.getTimestamp().isAfter(timestamp)) {
                 return Optional.empty();
             }
-            if (oldSensorStateAvro.getData().equals(sensorEventAvro.getPayload())) {
+            if (previousState.getData().equals(payload)) {
                 return Optional.empty();
             }
         }
 
-        SensorStateAvro updatedState = buildSensorStateAvro(sensorEventAvro);
-        sensorsSnapshotAvro.getSensorsState().put(sensorId, updatedState);
-        sensorsSnapshotAvro.setTimestamp(sensorEventAvro.getTimestamp());
+        Map<String, SensorStateAvro> updatedStates = new HashMap<>(currentSnapshot.getSensorsState());
 
-        return Optional.of(sensorsSnapshotAvro);
-    }
+        updatedStates.put(sensorId, SensorStateAvro.newBuilder()
+                .setTimestamp(timestamp)
+                .setData(payload)
+                .build());
 
-    private SensorsSnapshotAvro createSensorSnapshotAvro(SensorEventAvro sensorEventAvro) {
-        Map<String, SensorStateAvro> sensorsState = new HashMap<>();
-        sensorsState.put(sensorEventAvro.getId(), buildSensorStateAvro(sensorEventAvro));
-
-        return SensorsSnapshotAvro.newBuilder()
-                .setHubId(sensorEventAvro.getHubId())
-                .setTimestamp(sensorEventAvro.getTimestamp())
-                .setSensorsState(sensorsState)
+        SensorsSnapshotAvro newSnapshot = SensorsSnapshotAvro.newBuilder()
+                .setHubId(hubId)
+                .setTimestamp(timestamp)
+                .setSensorsState(updatedStates)
                 .build();
+
+        snapshots.put(hubId, newSnapshot);
+        return Optional.of(newSnapshot);
     }
 
-    private SensorStateAvro buildSensorStateAvro(SensorEventAvro sensorEventAvro) {
-
-        return SensorStateAvro.newBuilder()
-                .setTimestamp(sensorEventAvro.getTimestamp())
-                .setData(sensorEventAvro.getPayload())
-                .build();
-    }
 }

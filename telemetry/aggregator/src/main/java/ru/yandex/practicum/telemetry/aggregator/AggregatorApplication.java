@@ -3,6 +3,7 @@ package ru.yandex.practicum.telemetry.aggregator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import ru.yandex.practicum.telemetry.aggregator.starter.AggregationStarter;
 
 @SpringBootApplication
 public class AggregatorApplication {

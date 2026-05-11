@@ -1,38 +1,14 @@
 package ru.yandex.practicum.telemetry.collector.handler.hub;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceAddedEventProto;
+import ru.yandex.practicum.grpc.telemetry.event.DeviceTypeProto;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
 import ru.yandex.practicum.kafka.telemetry.event.DeviceAddedEventAvro;
-import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
-import ru.yandex.practicum.telemetry.collector.handler.CollectorProducer;
-import ru.yandex.practicum.telemetry.collector.handler.hub.maper.HubMapper;
-
-import java.time.Instant;
+import ru.yandex.practicum.kafka.telemetry.event.DeviceTypeAvro;
 
 @Component
 public class DeviceAddedEventHandler extends BaseHubHandler<DeviceAddedEventAvro> {
-
-    public DeviceAddedEventHandler(@Value("${kafka.topic.telemetry.hubs-topic}") String topic,
-                                   CollectorProducer collectorProducer) {
-        super(topic, collectorProducer);
-    }
-
-    @Override
-    public void handle(HubEventProto hubEventProto) {
-        DeviceAddedEventAvro deviceAddedEventAvro = mapToAvro(hubEventProto);
-
-        HubEventAvro hubEventAvro = HubEventAvro.newBuilder()
-                .setHubId(hubEventProto.getHubId())
-                .setTimestamp(Instant.ofEpochSecond(
-                        hubEventProto.getTimestamp().getSeconds(),
-                        hubEventProto.getTimestamp().getNanos()))
-                .setPayload(deviceAddedEventAvro)
-                .build();
-
-        producer.send(topic, hubEventAvro);
-    }
 
     @Override
     protected DeviceAddedEventAvro mapToAvro(HubEventProto hubEventProto) {
@@ -40,7 +16,7 @@ public class DeviceAddedEventHandler extends BaseHubHandler<DeviceAddedEventAvro
 
         return DeviceAddedEventAvro.newBuilder()
                 .setId(deviceAddedEventProto.getId())
-                .setType(HubMapper.mapToDeviceTypeAvro(deviceAddedEventProto.getType()))
+                .setType(mapToDeviceTypeAvro(deviceAddedEventProto.getType()))
                 .build();
     }
 
@@ -49,4 +25,14 @@ public class DeviceAddedEventHandler extends BaseHubHandler<DeviceAddedEventAvro
         return HubEventProto.PayloadCase.DEVICE_ADDED;
     }
 
+    private DeviceTypeAvro mapToDeviceTypeAvro(DeviceTypeProto deviceTypeProto) {
+        return switch (deviceTypeProto) {
+            case DeviceTypeProto.LIGHT_SENSOR -> DeviceTypeAvro.LIGHT_SENSOR;
+            case DeviceTypeProto.MOTION_SENSOR -> DeviceTypeAvro.MOTION_SENSOR;
+            case DeviceTypeProto.SWITCH_SENSOR -> DeviceTypeAvro.SWITCH_SENSOR;
+            case DeviceTypeProto.CLIMATE_SENSOR -> DeviceTypeAvro.CLIMATE_SENSOR;
+            case DeviceTypeProto.TEMPERATURE_SENSOR -> DeviceTypeAvro.TEMPERATURE_SENSOR;
+            case DeviceTypeProto.UNRECOGNIZED -> null;
+        };
+    }
 }
