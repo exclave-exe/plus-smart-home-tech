@@ -6,12 +6,12 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProducerAggregator {
+public class AggregatorProducer {
 
     private final Producer<String, SpecificRecordBase> producer;
     private final String snapshotsTopic;
 
-    public ProducerAggregator(
+    public AggregatorProducer(
             Producer<String, SpecificRecordBase> producer,
             ProducerProperties properties
     ) {

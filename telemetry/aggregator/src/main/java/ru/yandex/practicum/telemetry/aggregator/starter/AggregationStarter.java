@@ -9,8 +9,8 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
-import ru.yandex.practicum.telemetry.aggregator.kafka.ConsumerAggregator;
-import ru.yandex.practicum.telemetry.aggregator.kafka.ProducerAggregator;
+import ru.yandex.practicum.telemetry.aggregator.kafka.AggregatorConsumer;
+import ru.yandex.practicum.telemetry.aggregator.kafka.AggregatorProducer;
 import ru.yandex.practicum.telemetry.aggregator.service.AggregatorService;
 
 import java.time.Duration;
@@ -21,8 +21,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AggregationStarter {
 
-    private final ConsumerAggregator consumer;
-    private final ProducerAggregator producer;
+    private final AggregatorConsumer consumer;
+    private final AggregatorProducer producer;
     private final AggregatorService service;
 
     public void start() {
@@ -37,6 +37,8 @@ public class AggregationStarter {
             }
         } catch (WakeupException ignored) {
             // .close в ConsumerConfiguration и ProducerConfiguration
+        } catch (Exception e) {
+            log.error("Error", e);
         }
     }
 

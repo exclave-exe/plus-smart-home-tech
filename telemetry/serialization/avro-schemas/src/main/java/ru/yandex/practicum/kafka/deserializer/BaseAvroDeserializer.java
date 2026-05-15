@@ -10,9 +10,8 @@ import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 
 public class BaseAvroDeserializer<T extends SpecificRecordBase> implements Deserializer<T> {
-
     private final DecoderFactory decoderFactory;
-    private final DatumReader<T> datumReader;
+    private final DatumReader<T> reader;
 
     public BaseAvroDeserializer(Schema schema) {
         this(DecoderFactory.get(), schema);
@@ -20,20 +19,19 @@ public class BaseAvroDeserializer<T extends SpecificRecordBase> implements Deser
 
     public BaseAvroDeserializer(DecoderFactory decoderFactory, Schema schema) {
         this.decoderFactory = decoderFactory;
-        this.datumReader = new SpecificDatumReader<>(schema);
+        this.reader = new SpecificDatumReader<>(schema);
     }
 
     @Override
     public T deserialize(String topic, byte[] data) {
-
-        if (data == null) return null;
-
         try {
-            BinaryDecoder decoder = decoderFactory.binaryDecoder(data, null);
-            return datumReader.read(null, decoder);
-
-        } catch (Exception exception) {
-            throw new SerializationException("Ошибка десериализации из топика [" + topic + "]", exception);
+            if (data != null) {
+                BinaryDecoder decoder = decoderFactory.binaryDecoder(data, null);
+                return this.reader.read(null, decoder);
+            }
+            return null;
+        } catch (Exception e) {
+            throw new SerializationException("Ошибка десереализации из [" + topic + "]", e);
         }
     }
 }
