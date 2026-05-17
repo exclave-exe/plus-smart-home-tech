@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.time.Duration;
+
 @ConfigurationProperties("aggregator.kafka.consumer.shapshot")
 @Setter
 @Getter
@@ -15,5 +17,6 @@ public class SnapshotConsumerProperties {
     private String groupId;
     private Boolean enableAutoCommit;
     private String snapshotTopic;
+    private Duration timeout;
 
 }

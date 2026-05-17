@@ -31,6 +31,9 @@ public class ScenarioService {
     private final ActionRepository actionRepository;
     private final SensorRepository sensorRepository;
 
+    private static final int TRUE_INT = 1;
+    private static final int FALSE_INT = 0;
+
     public Scenario save(ScenarioAddedEventAvro event, String hubId) {
 
         Set<String> sensorIds = collectSensorIds(event);
@@ -118,7 +121,7 @@ public class ScenarioService {
         }
 
         if (value instanceof Boolean booleanValue) {
-            return booleanValue ? 1 : 0;
+            return booleanValue ? TRUE_INT : FALSE_INT;
         }
 
         return null;

@@ -29,7 +29,7 @@ public class HubStarter implements Runnable {
         hubConsumer.subscribe();
         try {
             while (true) {
-                ConsumerRecords<String, HubEventAvro> records = hubConsumer.poll(Duration.ofSeconds(5));
+                ConsumerRecords<String, HubEventAvro> records = hubConsumer.poll();
                 if (!records.isEmpty()) {
                     for (ConsumerRecord<String, HubEventAvro> record : records) {
                         dispatch(record.value());
@@ -37,10 +37,11 @@ public class HubStarter implements Runnable {
                     hubConsumer.commitSync();
                 }
             }
-        } catch (WakeupException e) {
-            // .close в HubConsumerConfiguration
+        } catch (WakeupException ignored) {
         } catch (Exception exception) {
             log.error("Error", exception);
+        } finally {
+            hubConsumer.close();
         }
     }
 

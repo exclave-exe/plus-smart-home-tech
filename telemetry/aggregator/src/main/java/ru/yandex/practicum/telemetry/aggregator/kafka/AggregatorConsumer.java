@@ -13,6 +13,7 @@ public class AggregatorConsumer {
 
     private final Consumer<String, SpecificRecordBase> consumer;
     private final String sensorTopic;
+    private final Duration timeout;
 
     public AggregatorConsumer(
             Consumer<String, SpecificRecordBase> consumer,
@@ -20,14 +21,15 @@ public class AggregatorConsumer {
     ) {
         this.consumer = consumer;
         this.sensorTopic = properties.getSensorsTopic();
+        this.timeout = properties.getTimeout();
     }
 
     public void subscribe() {
         consumer.subscribe(List.of(sensorTopic));
     }
 
-    public ConsumerRecords<String, SpecificRecordBase> poll(Duration duration) {
-        return consumer.poll(duration);
+    public ConsumerRecords<String, SpecificRecordBase> poll() {
+        return consumer.poll(timeout);
     }
 
     public void commitSync() {
@@ -36,6 +38,10 @@ public class AggregatorConsumer {
 
     public void wakeup() {
         consumer.wakeup();
+    }
+
+    public void close() {
+        consumer.close();
     }
 
 }

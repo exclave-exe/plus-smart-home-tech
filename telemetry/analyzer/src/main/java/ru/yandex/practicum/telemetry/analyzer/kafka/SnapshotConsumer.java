@@ -13,6 +13,7 @@ public class SnapshotConsumer {
 
     private final Consumer<String, SensorsSnapshotAvro> consumer;
     private final String sensorTopic;
+    private final Duration timeout;
 
     public SnapshotConsumer(
             Consumer<String, SensorsSnapshotAvro> consumer,
@@ -20,18 +21,19 @@ public class SnapshotConsumer {
     ) {
         this.consumer = consumer;
         this.sensorTopic = properties.getSnapshotTopic();
+        this.timeout = properties.getTimeout();
     }
 
     public void subscribe() {
         consumer.subscribe(List.of(sensorTopic));
     }
 
-    public ConsumerRecords<String, SensorsSnapshotAvro> poll(Duration duration) {
-        return consumer.poll(duration);
+    public ConsumerRecords<String, SensorsSnapshotAvro> poll() {
+        return consumer.poll(timeout);
     }
 
-    public void commitAsync() {
-        consumer.commitAsync();
+    public void close() {
+        consumer.close();
     }
 
     public void commitSync() {

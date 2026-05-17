@@ -31,14 +31,15 @@ public class AggregationStarter {
 
         try {
             while (true) {
-                ConsumerRecords<String, SpecificRecordBase> records = consumer.poll(Duration.ofSeconds(5));
+                ConsumerRecords<String, SpecificRecordBase> records = consumer.poll();
                 process(records);
                 consumer.commitSync();
             }
         } catch (WakeupException ignored) {
-            // .close в ConsumerConfiguration и ProducerConfiguration
         } catch (Exception e) {
             log.error("Error", e);
+        } finally {
+            consumer.close();
         }
     }
 

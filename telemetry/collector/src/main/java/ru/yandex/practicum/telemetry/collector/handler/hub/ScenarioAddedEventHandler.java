@@ -39,7 +39,8 @@ public class ScenarioAddedEventHandler extends BaseHubHandler<ScenarioAddedEvent
             case DEACTIVATE -> ActionTypeAvro.DEACTIVATE;
             case INVERSE -> ActionTypeAvro.INVERSE;
             case SET_VALUE -> ActionTypeAvro.SET_VALUE;
-            case UNRECOGNIZED -> null;
+            default -> throw new IllegalArgumentException("Unknown type");
+
         };
 
         return DeviceActionAvro.newBuilder()
@@ -65,14 +66,14 @@ public class ScenarioAddedEventHandler extends BaseHubHandler<ScenarioAddedEvent
             case TEMPERATURE -> ConditionTypeAvro.TEMPERATURE;
             case CO2LEVEL -> ConditionTypeAvro.CO2LEVEL;
             case HUMIDITY -> ConditionTypeAvro.HUMIDITY;
-            case UNRECOGNIZED -> throw new IllegalArgumentException("Unknown condition type");
+            default -> throw new IllegalArgumentException("Unknown type");
         };
 
         ConditionOperationAvro operation = switch (scenarioConditionProto.getOperation()) {
             case EQUALS -> ConditionOperationAvro.EQUALS;
             case GREATER_THAN -> ConditionOperationAvro.GREATER_THAN;
             case LOWER_THAN -> ConditionOperationAvro.LOWER_THAN;
-            case UNRECOGNIZED -> throw new IllegalArgumentException("Unknown operation type");
+            default -> throw new IllegalArgumentException("Unknown type");
         };
 
         return ScenarioConditionAvro.newBuilder()

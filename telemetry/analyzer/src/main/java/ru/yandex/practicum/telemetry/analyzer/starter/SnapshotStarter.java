@@ -8,18 +8,12 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 import ru.yandex.practicum.telemetry.analyzer.kafka.SnapshotConsumer;
-import ru.yandex.practicum.telemetry.analyzer.service.DeviceService;
-import ru.yandex.practicum.telemetry.analyzer.service.ScenarioService;
-
-import java.time.Duration;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class SnapshotStarter {
     private final SnapshotConsumer snapshotConsumer;
-    private final DeviceService deviceService;
-    private final ScenarioService scenarioService;
     private final SnapshotAnalyzer snapshotAnalyzer;
 
     public void start() {
@@ -27,7 +21,7 @@ public class SnapshotStarter {
         snapshotConsumer.subscribe();
         try {
             while (true) {
-                ConsumerRecords<String, SensorsSnapshotAvro> records = snapshotConsumer.poll(Duration.ofSeconds(5));
+                ConsumerRecords<String, SensorsSnapshotAvro> records = snapshotConsumer.poll();
 
                 if (!records.isEmpty()) {
                     int count = 0;
@@ -37,10 +31,11 @@ public class SnapshotStarter {
                     snapshotConsumer.commitSync();
                 }
             }
-        } catch (WakeupException e) {
-            // .close в HubConsumerConfiguration
+        } catch (WakeupException ignored) {
         } catch (Exception exception) {
             log.error("Error", exception);
+        } finally {
+            snapshotConsumer.close();
         }
     }
 }

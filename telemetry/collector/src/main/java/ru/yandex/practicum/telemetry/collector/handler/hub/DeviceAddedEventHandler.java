@@ -32,7 +32,7 @@ public class DeviceAddedEventHandler extends BaseHubHandler<DeviceAddedEventAvro
             case DeviceTypeProto.SWITCH_SENSOR -> DeviceTypeAvro.SWITCH_SENSOR;
             case DeviceTypeProto.CLIMATE_SENSOR -> DeviceTypeAvro.CLIMATE_SENSOR;
             case DeviceTypeProto.TEMPERATURE_SENSOR -> DeviceTypeAvro.TEMPERATURE_SENSOR;
-            case DeviceTypeProto.UNRECOGNIZED -> null;
+            default -> throw new IllegalArgumentException("Unknown type");
         };
     }
 }

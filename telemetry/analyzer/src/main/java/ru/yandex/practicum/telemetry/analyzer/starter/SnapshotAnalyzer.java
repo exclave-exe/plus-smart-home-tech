@@ -29,6 +29,9 @@ public class SnapshotAnalyzer {
 
     private final ScenarioRepository scenarioRepository;
 
+    private static final int TRUE_INT = 1;
+    private static final int FALSE_INT = 0;
+
     @GrpcClient("hub-router")
     private HubRouterControllerBlockingStub routerClient;
 
@@ -66,11 +69,11 @@ public class SnapshotAnalyzer {
             case LightSensorAvro light -> condition.getType() == LUMINOSITY
                     && condition.check(light.getLuminosity());
             case MotionSensorAvro motion -> condition.getType() == MOTION
-                    && condition.check(motion.getMotion() ? 1 : 0);
+                    && condition.check(motion.getMotion() ? TRUE_INT : FALSE_INT);
             case TemperatureSensorAvro temperature -> condition.getType() == TEMPERATURE
                     && condition.check(temperature.getTemperatureC());
             case SwitchSensorAvro sw -> condition.getType() == SWITCH
-                    && condition.check(sw.getState() ? 1 : 0);
+                    && condition.check(sw.getState() ? TRUE_INT : FALSE_INT);
             default -> false;
         };
     }
