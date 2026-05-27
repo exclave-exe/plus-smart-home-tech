@@ -1,12 +1,12 @@
 package ru.yandex.practicum.telemetry.collector.handler.sensor;
 
-import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
-import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
+import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEvent;
+import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEventType;
 
 public interface SensorHandler {
 
-    SensorEventAvro handle(SensorEventProto sensorEventProto);
+    void handle(SensorEvent sensorEvent);
 
-    SensorEventProto.PayloadCase getType();
+    SensorEventType getType();
 
 }
