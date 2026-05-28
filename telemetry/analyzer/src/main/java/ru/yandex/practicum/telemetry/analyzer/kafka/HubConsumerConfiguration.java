@@ -11,7 +11,6 @@ import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import java.util.Properties;
 
 @Configuration
-@EnableConfigurationProperties(HubConsumerProperties.class)
 public class HubConsumerConfiguration {
 
     @Bean(destroyMethod = "close")

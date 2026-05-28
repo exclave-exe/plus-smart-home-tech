@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "collector.kafka.producer")
+@ConfigurationProperties("collector.kafka.producer")
 @Getter
 @Setter
 public class ProducerProperties {

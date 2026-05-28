@@ -11,7 +11,6 @@ import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 import java.util.Properties;
 
 @Configuration
-@EnableConfigurationProperties(SnapshotConsumerProperties.class)
 public class SnapshotConsumerConfiguration {
 
     @Bean(destroyMethod = "close")
