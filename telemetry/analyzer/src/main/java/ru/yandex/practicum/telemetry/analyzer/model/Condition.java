@@ -6,7 +6,7 @@ import lombok.Setter;
 import ru.yandex.practicum.kafka.telemetry.event.ConditionTypeAvro;
 
 @Entity
-@Table(name = "conditions")
+@Table(name = "conditions", schema = "analyzer")
 @Setter
 @Getter
 public class Condition {

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-@Table(name = "scenarios")
+@Table(name = "scenarios",  schema = "analyzer")
 @Setter
 @Getter
 public class Scenario {
