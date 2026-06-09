@@ -1,13 +1,12 @@
 package ru.yandex.practicum.telemetry.collector.handler.hub;
 
-import ru.yandex.practicum.telemetry.collector.model.hub.HubEvent;
-import ru.yandex.practicum.telemetry.collector.model.hub.HubEventType;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
+import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 
 public interface HubHandler {
 
-    void handle(HubEvent hubEvent);
+    HubEventAvro handle(HubEventProto hubEventProto);
 
-    HubEventType getType();
+    HubEventProto.PayloadCase getType();
 
 }
-
