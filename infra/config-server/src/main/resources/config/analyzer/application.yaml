@@ -38,7 +38,6 @@ spring:
         format_sql: true
         temp:
           use_jdbc_metadata_defaults: false
-        default_schema: analyzer
 
   sql:
     init:
