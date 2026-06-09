@@ -1,15 +1,19 @@
-package ru.yandex.practicum.shopping.store;
+package ru.yandex.practicum.shopping.cart;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
-public class ShoppingStoreApplication {
+@EnableFeignClients(basePackages = "ru.yandex.practicum.interaction")
+@ComponentScan(basePackages = {"ru.yandex.practicum.shopping.cart", "ru.yandex.practicum.interaction"})
+public class ShoppingCartApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ShoppingStoreApplication.class, args);
+        SpringApplication.run(ShoppingCartApplication.class, args);
     }
 
 }

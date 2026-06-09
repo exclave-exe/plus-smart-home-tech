@@ -1,8 +1,23 @@
-package ru.yandex.practicum.warehouse.dto;
+package ru.yandex.practicum.interaction.warehouse.dto;
 
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.UUID;
+
+@AllArgsConstructor
+@Setter
+@Getter
 public class AddProductToWarehouseRequest {
-    private String productId;
+
+    @NotNull
+    private UUID productId;
+
+    @NotNull
+    @Positive
     private Long quantity;
+
 }

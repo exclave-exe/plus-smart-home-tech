@@ -1,4 +1,4 @@
-package ru.yandex.practicum.interaction.enums;
+package ru.yandex.practicum.interaction.store.enums;
 
 public enum QuantityState {
 

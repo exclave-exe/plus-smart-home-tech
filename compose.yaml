@@ -49,3 +49,21 @@ services:
       retries: 10
     ports:
       - "5433:5432"
+
+  postgres-init:
+    image: postgres:16.1
+    container_name: postgres-init
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      bash -c "
+        until pg_isready -h postgres -U user; do sleep 2; done;
+        PGPASSWORD=123 psql -h postgres -U user -d test -c 'CREATE DATABASE shopping_store_db;';
+        PGPASSWORD=123 psql -h postgres -U user -d test -c 'CREATE DATABASE shopping_cart_db;';
+        PGPASSWORD=123 psql -h postgres -U user -d test -c 'CREATE DATABASE warehouse_db;';
+        echo 'Базы данных созданы.'
+      "
+    init: true
+    networks:
+      - default

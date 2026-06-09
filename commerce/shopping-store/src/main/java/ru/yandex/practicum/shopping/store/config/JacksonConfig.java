@@ -1,4 +1,4 @@
-package ru.yandex.practicum.shopping.store.mapper;
+package ru.yandex.practicum.shopping.store.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -15,27 +15,27 @@ public class JacksonConfig {
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jacksonSortCustomizer() {
-        return builder -> builder.serializerByType(
-                Sort.class,
-                new JsonSerializer<Sort>() {
-                    @Override
-                    public void serialize(Sort value,
-                                          JsonGenerator gen,
-                                          SerializerProvider serializers) throws IOException {
+        return builder -> builder.serializerByType(Sort.class, new JsonSerializer<Sort>() {
 
-                        gen.writeStartArray();
+            @Override
+            public void serialize(
 
-                        for (Sort.Order order : value) {
-                            gen.writeStartObject();
-                            gen.writeStringField("property", order.getProperty());
-                            gen.writeStringField("direction", order.getDirection().name());
-                            gen.writeBooleanField("ignoreCase", order.isIgnoreCase());
-                            gen.writeEndObject();
-                        }
+                    Sort value,
+                    JsonGenerator gen,
+                    SerializerProvider serializers
 
-                        gen.writeEndArray();
-                    }
+            ) throws IOException {
+
+                gen.writeStartArray();
+                for (Sort.Order order : value) {
+                    gen.writeStartObject();
+                    gen.writeStringField("property", order.getProperty());
+                    gen.writeStringField("direction", order.getDirection().name());
+                    gen.writeBooleanField("ignoreCase", order.isIgnoreCase());
+                    gen.writeEndObject();
                 }
-        );
+                gen.writeEndArray();
+            }
+        });
     }
 }

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.shopping.store.exception;
+package ru.yandex.practicum.warehouse.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -7,13 +7,26 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import ru.yandex.practicum.interaction.exception.ProductInShoppingCartLowQuantityInWarehouse;
 
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(ProductNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFound(ProductNotFoundException e) {
+    @ExceptionHandler(NoSpecifiedProductInWarehouseException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleNoSpecifiedProduct(NoSpecifiedProductInWarehouseException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(ProductInShoppingCartLowQuantityInWarehouse.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleLowQuantity(ProductInShoppingCartLowQuantityInWarehouse e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(SpecifiedProductAlreadyInWarehouseException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleAlreadyExists(SpecifiedProductAlreadyInWarehouseException e) {
         return new ErrorResponse(e.getMessage());
     }
 

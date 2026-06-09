@@ -1,41 +1,44 @@
-package ru.yandex.practicum.telemetry.analyzer.exception;
+package ru.yandex.practicum.shopping.store.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(BadRequestException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBadRequest(BadRequestException e) {
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFound(NotFoundException e) {
+    public ErrorResponse handleNotFound(ProductNotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
 
-    @ExceptionHandler(ConflictException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleConflict(ConflictException e) {
-        return new ErrorResponse(e.getMessage());
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidationException(MethodArgumentTypeMismatchException e) {
+        return new ErrorResponse("Ошибка приведения параметра запроса");
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidationException(ConstraintViolationException e) {
+        return new ErrorResponse("Ошибка валидации параметров запроса");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(MethodArgumentNotValidException e) {
-        return new ErrorResponse("Validation failed: " + e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        return new ErrorResponse("Ошибка валидации тела запроса");
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(Exception e) {
-        return new ErrorResponse("Internal server error: " + e.getMessage());
+        return new ErrorResponse("Внутренняя ошибка сервиса");
     }
+
 }

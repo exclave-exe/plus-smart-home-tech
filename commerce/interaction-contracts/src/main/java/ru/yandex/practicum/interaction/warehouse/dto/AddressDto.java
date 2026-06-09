@@ -1,8 +1,12 @@
-package ru.yandex.practicum.warehouse.dto;
+package ru.yandex.practicum.interaction.warehouse.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
+@Setter
+@Getter
 public class AddressDto {
 
     private String country;

@@ -2,7 +2,7 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/shopping_store_db
+    url: jdbc:postgresql://localhost:5433/warehouse_db
     username: user
     password: 123
 
@@ -15,3 +15,8 @@ spring:
         temp.use_jdbc_metadata_defaults: false
 
   sql.init.mode: always
+
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true

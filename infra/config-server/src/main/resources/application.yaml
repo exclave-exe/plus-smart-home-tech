@@ -11,7 +11,7 @@ spring:
       server:
         native:
           searchLocations:
-            - classpath:config/telemetry/{application}
+            - classpath:config/{application}
 eureka:
   instance:
     lease-renewal-interval-in-seconds: 15

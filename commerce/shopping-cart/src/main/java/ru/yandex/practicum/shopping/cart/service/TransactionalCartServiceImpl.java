@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CartServiceImpl implements CartService {
+public class TransactionalCartServiceImpl implements TransactionalCartService {
 
     private final CartRepository repository;
     private final CartMapper mapper;
@@ -34,14 +34,9 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public CartDto addProductsToCart(String username, Map<UUID, Long> products) {
-        Cart cart = getActiveCartOrCreateNewCart(username);
-
-        products.forEach((productId, quantity) -> {
-            cart.getProducts().merge(productId, quantity, Long::sum);
-        });
-
-        repository.save(cart);
-        return mapper.toDto(cart);
+        Cart cart = getActiveCart(username);
+        products.forEach((id, qty) -> cart.getProducts().merge(id, qty, Long::sum));
+        return mapper.toDto(repository.save(cart));
     }
 
     @Override

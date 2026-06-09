@@ -1,20 +1,24 @@
-package ru.yandex.practicum.interaction.dto;
+package ru.yandex.practicum.interaction.store.dto;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.yandex.practicum.interaction.enums.ProductCategory;
-import ru.yandex.practicum.interaction.enums.ProductState;
-import ru.yandex.practicum.interaction.enums.QuantityState;
+import ru.yandex.practicum.interaction.store.enums.ProductCategory;
+import ru.yandex.practicum.interaction.store.enums.ProductState;
+import ru.yandex.practicum.interaction.store.enums.QuantityState;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Getter @Setter
+@AllArgsConstructor
+@Getter
+@Setter
 public class ProductDto {
+
     private UUID productId;
 
     @NotBlank(message = "Наименование товара не может быть пустым")
@@ -38,4 +42,5 @@ public class ProductDto {
     @DecimalMin(value = "1.0", message = "Цена должна быть не менее 1")
     @Digits(integer = 10, fraction = 2)
     private BigDecimal price;
+
 }

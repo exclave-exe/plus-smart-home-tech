@@ -4,8 +4,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.shopping.cart.dto.CartDto;
-import ru.yandex.practicum.shopping.cart.dto.ChangeProductQuantityRequest;
+import ru.yandex.practicum.interaction.cart.dto.CartDto;
+import ru.yandex.practicum.interaction.cart.dto.ChangeProductQuantityRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +19,7 @@ public interface ShoppingCartOperations {
     @PutMapping
     CartDto addProductsToCart(
             @RequestParam @NotBlank String username,
-            @RequestBody @NotNull Map<UUID, Integer> products
+            @RequestBody @NotNull Map<UUID, Long> products
     );
 
     @PostMapping("/change-quantity")
@@ -36,4 +36,5 @@ public interface ShoppingCartOperations {
 
     @DeleteMapping
     void deactivateCart(@RequestParam @NotBlank String username);
+
 }

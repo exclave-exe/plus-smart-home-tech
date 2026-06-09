@@ -9,10 +9,10 @@ import java.util.Map;
 import java.util.UUID;
 
 @Entity
-@Table(name = "shopping_cart")
+@Table(name = "cart")
 @Setter
 @Getter
-public class ShoppingCart {
+public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,5 +29,5 @@ public class ShoppingCart {
     @CollectionTable(name = "cart_products", joinColumns = @JoinColumn(name = "cart_id"))
     @MapKeyColumn(name = "product_id")
     @Column(name = "quantity")
-    private Map<UUID, Integer> products = new HashMap<>();
+    private Map<UUID, Long> products = new HashMap<>();
 }

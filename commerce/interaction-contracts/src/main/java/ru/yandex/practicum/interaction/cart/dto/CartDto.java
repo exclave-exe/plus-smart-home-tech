@@ -1,19 +1,22 @@
-package ru.yandex.practicum.interaction.dto;
+package ru.yandex.practicum.interaction.cart.dto;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Setter @Getter
+@AllArgsConstructor
+@Setter
+@Getter
 public class CartDto {
 
     @NotNull
-    private UUID ShoppingCartId;
+    private UUID shoppingCartId;
 
     @NotNull
-    private Map<UUID, Integer> products = new HashMap<>();
+    private Map<UUID, Long> products;
+
 }
