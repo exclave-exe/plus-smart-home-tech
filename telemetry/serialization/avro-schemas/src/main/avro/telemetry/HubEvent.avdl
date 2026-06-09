@@ -1,6 +1,14 @@
 @namespace("ru.yandex.practicum.kafka.telemetry.event")
 protocol HubEventProtocol {
 
+    //-------------------------------------------------------
+    // Запись, описывающая событие добавления устройства.
+    record DeviceAddedEventAvro {
+        string id;
+        DeviceTypeAvro type;
+    }
+
+    // Перечисление, описывающее типы устройств.
     enum DeviceTypeAvro {
         MOTION_SENSOR,
         TEMPERATURE_SENSOR,
@@ -9,15 +17,30 @@ protocol HubEventProtocol {
         SWITCH_SENSOR
     }
 
-    record DeviceAddedEventAvro {
-        string id;
-        DeviceTypeAvro type;
-    }
-
+    //-------------------------------------------------------
+    // Запись, описывающая событие удаления устройства.
     record DeviceRemovedEventAvro {
         string id;
     }
 
+    //-------------------------------------------------------
+    // Запись, описывающая событие добавления сценария.
+    record ScenarioAddedEventAvro {
+        string name;
+        array<ScenarioConditionAvro> conditions;
+        array<DeviceActionAvro> actions;
+    }
+
+    //-------------------------------------------------------
+    // Запись, описывающая условия активации сценария
+    record ScenarioConditionAvro {
+        string sensor_id;
+        ConditionTypeAvro type;
+        ConditionOperationAvro operation;
+        union { null, int, boolean } value = null;
+    }
+
+    // Перечисление, описывающее типы условий для сценариев.
     enum ConditionTypeAvro {
         MOTION,
         LUMINOSITY,
@@ -27,23 +50,22 @@ protocol HubEventProtocol {
         HUMIDITY
     }
 
+    // Перечисление, описывающее операторы, которые допустимы для построения условий.
     enum ConditionOperationAvro {
         EQUALS,
         GREATER_THAN,
         LOWER_THAN
     }
 
-    record ScenarioConditionAvro {
+    //-------------------------------------------------------
+    // Запись, описывающая действия, выполняемые устройством в рамках сценария.
+    record DeviceActionAvro {
         string sensor_id;
-        ConditionTypeAvro type;
-        ConditionOperationAvro operation;
-        union {
-            null,
-            int,
-            boolean
-        } value = null;
+        ActionTypeAvro type;
+        int? value = null;
     }
 
+    // Перечисление, описывающее типы действий.
     enum ActionTypeAvro {
         ACTIVATE,
         DEACTIVATE,
@@ -51,31 +73,18 @@ protocol HubEventProtocol {
         SET_VALUE
     }
 
-    record DeviceActionAvro {
-        string sensor_id;
-        ActionTypeAvro type;
-        int? value = null;
-    }
-
-    record ScenarioAddedEventAvro {
-        string name;
-        array<ScenarioConditionAvro> conditions;
-        array<DeviceActionAvro> actions;
-    }
-
+    //-------------------------------------------------------
+    // Запись, описывающая событие удаления сценария.
     record ScenarioRemovedEventAvro {
         string name;
     }
 
+    //-------------------------------------------------------
+    // Запись, описывающая событие, происходящее в хабе.
     record HubEventAvro {
         string hub_id;
         timestamp_ms timestamp;
-        union {
-            DeviceAddedEventAvro,
-            DeviceRemovedEventAvro,
-            ScenarioAddedEventAvro,
-            ScenarioRemovedEventAvro
-        } payload;
+        union { DeviceAddedEventAvro, DeviceRemovedEventAvro, ScenarioAddedEventAvro, ScenarioRemovedEventAvro } payload;
     }
 
 }

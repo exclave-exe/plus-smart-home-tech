@@ -1,25 +1,46 @@
 package ru.yandex.practicum.telemetry.collector.handler.sensor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
-import ru.yandex.practicum.grpc.telemetry.event.SwitchSensorProto;
+import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SwitchSensorAvro;
+import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
+import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEvent;
+import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEventType;
+import ru.yandex.practicum.telemetry.collector.model.sensor.SwitchSensorEvent;
 
 @Component
 public class SwitchSensorEventHandler extends BaseSensorHandler<SwitchSensorAvro> {
 
+    public SwitchSensorEventHandler(@Value("${kafka.topic.telemetry.sensors-topic}") String topic, TelemetryProducer telemetryProducer) {
+        super(topic, telemetryProducer);
+    }
+
     @Override
-    protected SwitchSensorAvro mapToAvro(SensorEventProto sensorEventProto) {
-        SwitchSensorProto switchSensorProto = sensorEventProto.getSwitchSensor();
+    public void handle(SensorEvent sensorEvent) {
+        SwitchSensorAvro switchSensorAvro = mapToAvro(sensorEvent);
+
+        SensorEventAvro sensorEventAvro = SensorEventAvro.newBuilder()
+                .setId(sensorEvent.getId())
+                .setHubId(sensorEvent.getHubId())
+                .setTimestamp(sensorEvent.getTimestamp())
+                .setPayload(switchSensorAvro)
+                .build();
+
+        producer.send(topic, sensorEventAvro);
+    }
+
+    @Override
+    protected SwitchSensorAvro mapToAvro(SensorEvent sensorEvent) {
+        SwitchSensorEvent switchSensorEvent = (SwitchSensorEvent) sensorEvent;
 
         return SwitchSensorAvro.newBuilder()
-                .setState(switchSensorProto.getState())
+                .setState(switchSensorEvent.getState())
                 .build();
     }
 
     @Override
-    public SensorEventProto.PayloadCase getType() {
-        return SensorEventProto.PayloadCase.SWITCH_SENSOR;
+    public SensorEventType getType() {
+        return SensorEventType.SWITCH_SENSOR_EVENT;
     }
-
 }

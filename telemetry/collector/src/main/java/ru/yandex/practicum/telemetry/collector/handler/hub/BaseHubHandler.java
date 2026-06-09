@@ -1,26 +1,18 @@
 package ru.yandex.practicum.telemetry.collector.handler.hub;
 
 import org.apache.avro.specific.SpecificRecordBase;
-import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
-import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
-
-import java.time.Instant;
+import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
+import ru.yandex.practicum.telemetry.collector.model.hub.HubEvent;
 
 public abstract class BaseHubHandler<V extends SpecificRecordBase> implements HubHandler {
 
-    protected abstract V mapToAvro(HubEventProto hubEventProto);
+    protected final String topic;
+    protected final TelemetryProducer producer;
 
-    @Override
-    public HubEventAvro handle(HubEventProto hubEventProto) {
-        V anyHubEventAvro = mapToAvro(hubEventProto);
-
-        return HubEventAvro.newBuilder()
-                .setHubId(hubEventProto.getHubId())
-                .setTimestamp(Instant.ofEpochSecond(
-                        hubEventProto.getTimestamp().getSeconds(),
-                        hubEventProto.getTimestamp().getNanos()))
-                .setPayload(anyHubEventAvro)
-                .build();
+    protected BaseHubHandler(String topic, TelemetryProducer producer) {
+        this.topic = topic;
+        this.producer = producer;
     }
 
+    protected abstract V mapToAvro(HubEvent hubEvent);
 }
