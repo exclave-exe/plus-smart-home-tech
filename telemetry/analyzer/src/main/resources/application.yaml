@@ -43,6 +43,12 @@ spring:
     init:
       mode: always
 
+  cloud:
+    config:
+      enabled: false
+      import-check:
+        enabled: false
+
 grpc:
   client:
     hub-router:
@@ -50,8 +56,6 @@ grpc:
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
-
-
 
 #server:
 #  port: 0

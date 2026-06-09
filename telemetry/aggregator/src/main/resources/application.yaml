@@ -14,8 +14,12 @@ aggregator:
       enable-auto-commit: false
       sensors-topic: telemetry.sensors.v1
       timeout: 5000
-
-
+spring:
+  cloud:
+    config:
+      enabled: false
+      import-check:
+        enabled: false
 
 #server:
 #  port: 0

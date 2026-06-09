@@ -11,6 +11,12 @@ collector:
       sensors-topic: telemetry.sensors.v1
       hubs-topic: telemetry.hubs.v1
 
+spring:
+  cloud:
+    config:
+      enabled: false
+      import-check:
+        enabled: false
 #server:
 #  port: 0
 #
