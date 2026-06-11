@@ -26,6 +26,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class WarehouseServiceImpl implements WarehouseService {
 
+    private static final double INITIAL_TOTAL_WEIGHT = 0.0;
+    private static final double INITIAL_TOTAL_VOLUME = 0.0;
+    private static final boolean NO_FRAGILE_ITEMS = false;
+
     private final ProductStockRepository repository;
     private final ProductStockMapper mapper;
     private final AddressConfig addressConfig;
@@ -71,9 +75,9 @@ public class WarehouseServiceImpl implements WarehouseService {
             throw new ProductInShoppingCartLowQuantityInWarehouse("Товаров нет на складе: " + notFoundIdSet);
         }
 
-        double totalWeight = 0.0;
-        double totalVolume = 0.0;
-        boolean hasFragile = false;
+        double totalWeight = INITIAL_TOTAL_WEIGHT;
+        double totalVolume = INITIAL_TOTAL_VOLUME;
+        boolean hasFragile = NO_FRAGILE_ITEMS;
         List<String> errors = new ArrayList<>();
 
         for (ProductStock stock : stocks) {

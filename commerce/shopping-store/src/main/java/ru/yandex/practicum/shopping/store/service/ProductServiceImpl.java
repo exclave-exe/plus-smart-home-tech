@@ -21,6 +21,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
+    private static final String SORT_PROPERTY = "productName";
+    private static final String ASC_DIRECTION = "asc";
+    private static final String DESC_DIRECTION = "desc";
+    private static final String SORT_SEPARATOR = ",";
+    private static final int SORT_PARTS_REQUIRED = 2;
+    private static final int PROPERTY_INDEX = 0;
+    private static final int DIRECTION_INDEX = 1;
+    private static final String[] DEFAULT_SORT = {SORT_PROPERTY + SORT_SEPARATOR + ASC_DIRECTION};
+
     private final ProductRepository repository;
     private final ProductMapper mapper;
 
@@ -83,19 +92,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Sort parseSort(String[] sort) {
-        if (sort == null || sort.length == 0) sort = new String[]{"productName,asc"};
+        if (sort == null || sort.length == 0) sort = DEFAULT_SORT;
         Sort sorting = Sort.unsorted();
 
         for (String s : sort) {
-            String[] element = s.split(",");
-            String parameter = element[0].trim();
+            String[] element = s.split(SORT_SEPARATOR);
+            String parameter = element[PROPERTY_INDEX].trim();
             Sort.Direction direction;
 
-            if (element.length < 2) {
+            if (element.length < SORT_PARTS_REQUIRED) {
                 direction = Sort.Direction.ASC;
             } else {
-                String dir = element[1].trim();
-                direction = dir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+                String dir = element[DIRECTION_INDEX].trim();
+                direction = dir.equalsIgnoreCase(DESC_DIRECTION) ? Sort.Direction.DESC : Sort.Direction.ASC;
             }
 
             sorting = sorting.and(Sort.by(direction, parameter));
