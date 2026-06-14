@@ -1,18 +1,26 @@
 package ru.yandex.practicum.telemetry.collector.handler.sensor;
 
 import org.apache.avro.specific.SpecificRecordBase;
-import ru.yandex.practicum.telemetry.collector.handler.TelemetryProducer;
-import ru.yandex.practicum.telemetry.collector.model.sensor.SensorEvent;
+import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
+import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
+
+import java.time.Instant;
 
 public abstract class BaseSensorHandler<V extends SpecificRecordBase> implements SensorHandler {
 
-    protected final String topic;
-    protected final TelemetryProducer producer;
+    protected abstract V mapToAvro(SensorEventProto sensorEventProto);
 
-    protected BaseSensorHandler(String topic, TelemetryProducer producer) {
-        this.topic = topic;
-        this.producer = producer;
+    @Override
+    public SensorEventAvro handle(SensorEventProto sensorEventProto) {
+        V anySensorEventAvro = mapToAvro(sensorEventProto);
+
+        return SensorEventAvro.newBuilder()
+                .setId(sensorEventProto.getId())
+                .setHubId(sensorEventProto.getHubId())
+                .setTimestamp(Instant.ofEpochSecond(
+                        sensorEventProto.getTimestamp().getSeconds(),
+                        sensorEventProto.getTimestamp().getNanos()))
+                .setPayload(anySensorEventAvro)
+                .build();
     }
-
-    protected abstract V mapToAvro(SensorEvent sensorEvent);
 }
