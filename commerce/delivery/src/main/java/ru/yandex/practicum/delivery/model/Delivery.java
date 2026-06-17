@@ -1,28 +1,28 @@
-package ru.yandex.practicum.model;
+package ru.yandex.practicum.delivery.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.UuidGenerator;
-import ru.yandex.practicum.dto.DeliveryState;
+import lombok.Getter;
+import lombok.Setter;
+import ru.yandex.practicum.interaction.delivery.enums.DeliveryState;
 
 import java.util.UUID;
 
 @Entity
-@Data
 @Table(name = "delivery")
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Setter
+@Getter
 public class Delivery {
 
     @Id
-    @UuidGenerator(style = UuidGenerator.Style.RANDOM)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "delivery_id")
     UUID deliveryId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "from_address_id", referencedColumnName = "address_id")
     Address fromAddress;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "to_address_id", referencedColumnName = "address_id")
     Address toAddress;
 

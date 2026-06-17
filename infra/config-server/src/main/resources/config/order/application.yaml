@@ -2,7 +2,7 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/payment_db
+    url: jdbc:postgresql://localhost:5433/order_db
     username: user
     password: 123
 

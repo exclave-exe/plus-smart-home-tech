@@ -1,7 +1,9 @@
-package ru.yandex.practicum.dto;
+package ru.yandex.practicum.interaction.payment.enums;
 
 public enum PaymentState {
-    PENDING,
+
     SUCCESS,
+    PENDING,
     FAILED
+
 }

@@ -1,23 +1,19 @@
-package ru.yandex.practicum.model;
+package ru.yandex.practicum.delivery.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.UuidGenerator;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
 @Entity
-@Data
 @Table(name = "address")
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Getter
+@Setter
 public class Address {
 
     @Id
-    @UuidGenerator(style = UuidGenerator.Style.RANDOM)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "address_id")
     UUID addressId;
 
@@ -30,4 +26,5 @@ public class Address {
     String house;
 
     String flat;
+
 }

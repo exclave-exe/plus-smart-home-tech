@@ -1,4 +1,4 @@
-package ru.yandex.practicum.interaction.order;
+package ru.yandex.practicum.interaction.order.enums;
 
 public enum OrderState {
     NEW,

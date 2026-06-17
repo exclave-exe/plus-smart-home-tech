@@ -1,9 +1,10 @@
-package ru.yandex.practicum.repository;
+package ru.yandex.practicum.delivery.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.yandex.practicum.model.Delivery;
+import ru.yandex.practicum.delivery.model.Delivery;
 
 import java.util.UUID;
 
 public interface DeliveryRepository extends JpaRepository<Delivery, UUID> {
+
 }

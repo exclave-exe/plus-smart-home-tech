@@ -1,34 +1,22 @@
-package ru.yandex.practicum.dto;
+package ru.yandex.practicum.interaction.payment.dto;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import lombok.Getter;
+import lombok.Setter;
+import ru.yandex.practicum.interaction.payment.enums.PaymentState;
 
 import java.util.UUID;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Setter
+@Getter
 public class PaymentDto {
 
-    @NotNull
     UUID paymentId;
-
-    @NotNull
     UUID orderId;
-
-    @NotNull
     Double totalPayment;
-
-    @NotNull
     Double deliveryTotal;
-
-    @NotNull
     Double feeTotal;
-
     PaymentState paymentState;
+
 }

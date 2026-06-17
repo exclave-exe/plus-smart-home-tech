@@ -1,4 +1,4 @@
-package ru.yandex.practicum.interaction.order.dto;
+package ru.yandex.practicum.interaction.delivery.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

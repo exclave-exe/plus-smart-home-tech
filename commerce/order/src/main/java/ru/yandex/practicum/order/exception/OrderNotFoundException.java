@@ -1,8 +1,8 @@
-package ru.yandex.practicum.shopping.store.exception;
+package ru.yandex.practicum.order.exception;
 
-public class ProductNotFoundException extends RuntimeException {
+public class OrderNotFoundException extends RuntimeException {
 
-    public ProductNotFoundException(String message) {
+    public OrderNotFoundException(String message) {
         super(message);
     }
 

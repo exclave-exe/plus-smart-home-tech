@@ -1,4 +1,4 @@
-package ru.yandex.practicum.shopping.store.exception;
+package ru.yandex.practicum.order.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -11,9 +11,9 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(ProductNotFoundException.class)
+    @ExceptionHandler(OrderNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFound(ProductNotFoundException e) {
+    public ErrorResponse handleNotFound(OrderNotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
 
