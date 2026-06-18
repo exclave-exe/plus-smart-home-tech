@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public interface ShoppingCartOperations {
+public interface ShoppingCartController {
 
     @GetMapping
     CartDto getCart(@RequestParam @NotBlank String username);

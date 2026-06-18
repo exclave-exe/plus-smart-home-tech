@@ -3,7 +3,7 @@ package ru.yandex.practicum.shopping.cart.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.interaction.cart.ShoppingCartOperations;
+import ru.yandex.practicum.interaction.cart.ShoppingCartController;
 import ru.yandex.practicum.interaction.cart.dto.CartDto;
 import ru.yandex.practicum.interaction.cart.dto.ChangeProductQuantityRequest;
 import ru.yandex.practicum.shopping.cart.service.NonTransactionalCartService;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/shopping-cart")
 @RequiredArgsConstructor
-public class CartController implements ShoppingCartOperations {
+public class CartControllerImpl implements ShoppingCartController {
 
     private final TransactionalCartService transactionalCartService;
     private final NonTransactionalCartService nonTransactionalCartService;

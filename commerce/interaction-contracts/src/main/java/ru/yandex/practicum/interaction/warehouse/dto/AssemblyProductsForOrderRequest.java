@@ -14,9 +14,9 @@ import java.util.UUID;
 public class AssemblyProductsForOrderRequest {
 
     @NotNull
-    UUID orderId;
+    private UUID orderId;
 
     @NotNull
-    Map<UUID, Long> products;
+    private Map<UUID, Long> products;
 
 }

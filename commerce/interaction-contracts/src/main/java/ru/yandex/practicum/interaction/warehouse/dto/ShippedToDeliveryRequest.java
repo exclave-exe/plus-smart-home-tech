@@ -13,9 +13,9 @@ import java.util.UUID;
 public class ShippedToDeliveryRequest {
 
     @NotNull
-    UUID orderId;
+    private UUID orderId;
 
     @NotNull
-    UUID deliveryId;
+    private UUID deliveryId;
 
 }

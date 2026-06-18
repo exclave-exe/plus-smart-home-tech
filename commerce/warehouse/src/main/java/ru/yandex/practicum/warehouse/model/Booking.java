@@ -17,26 +17,26 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "booking_id")
-    UUID bookingId;
+    private UUID bookingId;
 
     @Column(name = "fragile")
-    boolean fragile;
+    private boolean fragile;
 
     @Column(name = "delivery_volume")
-    double deliveryVolume;
+    private double deliveryVolume;
 
     @Column(name = "delivery_weight")
-    double deliveryWeight;
+    private double deliveryWeight;
 
     @ElementCollection
     @CollectionTable(name = "booking_products", joinColumns = @JoinColumn(name = "booking_id"))
     @MapKeyColumn(name = "product_id")
     @Column(name = "quantity")
-    Map<UUID, Long> products;
+    private Map<UUID, Long> products;
 
     @Column(name = "delivery_id")
-    UUID deliveryId;
+    private UUID deliveryId;
 
     @Column(name = "order_id")
-    UUID orderId;
+    private UUID orderId;
 }

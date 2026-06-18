@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.interaction.cart.dto.CartDto;
 import ru.yandex.practicum.interaction.delivery.dto.AddressDto;
-import ru.yandex.practicum.interaction.warehouse.WarehouseOperations;
+import ru.yandex.practicum.interaction.warehouse.WarehouseController;
 import ru.yandex.practicum.interaction.warehouse.dto.*;
 import ru.yandex.practicum.warehouse.service.WarehouseService;
 
@@ -15,7 +15,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/warehouse")
 @RequiredArgsConstructor
-public class WarehouseController implements WarehouseOperations {
+public class WarehouseControllerImpl implements WarehouseController {
 
     private final WarehouseService warehouseService;
 

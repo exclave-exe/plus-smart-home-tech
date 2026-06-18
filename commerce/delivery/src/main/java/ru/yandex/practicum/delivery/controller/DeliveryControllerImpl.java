@@ -1,9 +1,10 @@
 package ru.yandex.practicum.delivery.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.delivery.service.DeliveryService;
-import ru.yandex.practicum.interaction.delivery.DeliveryOperations;
+import ru.yandex.practicum.interaction.delivery.DeliveryController;
 import ru.yandex.practicum.interaction.delivery.dto.DeliveryDto;
 import ru.yandex.practicum.interaction.order.dto.OrderDto;
 
@@ -12,7 +13,8 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-public class DeliveryController implements DeliveryOperations {
+@RequestMapping("api/v1/delivery")
+public class DeliveryControllerImpl implements DeliveryController {
 
     private final DeliveryService service;
 

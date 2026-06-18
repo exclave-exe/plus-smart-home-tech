@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.interaction.store.ShoppingStoreOperations;
+import ru.yandex.practicum.interaction.store.ShoppingStoreController;
 import ru.yandex.practicum.interaction.store.dto.ProductDto;
 import ru.yandex.practicum.interaction.store.enums.ProductCategory;
 import ru.yandex.practicum.interaction.store.enums.QuantityState;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/shopping-store")
 @RequiredArgsConstructor
-public class StoreController implements ShoppingStoreOperations {
+public class StoreControllerImpl implements ShoppingStoreController {
 
     private final ProductService service;
 

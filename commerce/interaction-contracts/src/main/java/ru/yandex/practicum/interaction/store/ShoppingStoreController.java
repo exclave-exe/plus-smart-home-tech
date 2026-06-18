@@ -13,7 +13,7 @@ import ru.yandex.practicum.interaction.store.enums.QuantityState;
 import java.util.List;
 import java.util.UUID;
 
-public interface ShoppingStoreOperations {
+public interface ShoppingStoreController {
 
     @GetMapping("/{productId}")
     ProductDto getProduct(@PathVariable UUID productId);

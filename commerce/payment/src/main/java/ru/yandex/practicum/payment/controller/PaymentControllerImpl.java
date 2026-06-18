@@ -1,9 +1,10 @@
 package ru.yandex.practicum.payment.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.interaction.order.dto.OrderDto;
-import ru.yandex.practicum.interaction.payment.PaymentOperations;
+import ru.yandex.practicum.interaction.payment.PaymentController;
 import ru.yandex.practicum.interaction.payment.dto.PaymentDto;
 import ru.yandex.practicum.payment.service.PaymentService;
 
@@ -12,7 +13,8 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-public class PaymentController implements PaymentOperations {
+@RequestMapping("api/v1/payment")
+public class PaymentControllerImpl implements PaymentController {
 
     private final PaymentService service;
 

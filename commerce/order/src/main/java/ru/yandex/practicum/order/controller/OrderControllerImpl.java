@@ -3,7 +3,7 @@ package ru.yandex.practicum.order.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.interaction.order.OrderOperations;
+import ru.yandex.practicum.interaction.order.OrderController;
 import ru.yandex.practicum.interaction.order.dto.CreateNewOrderRequest;
 import ru.yandex.practicum.interaction.order.dto.OrderDto;
 import ru.yandex.practicum.interaction.order.dto.ProductReturnRequest;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("api/v1/order")
 @RequiredArgsConstructor
-public class OrderController implements OrderOperations {
+public class OrderControllerImpl implements OrderController {
 
     private final OrderService service;
 

@@ -10,7 +10,7 @@ import ru.yandex.practicum.interaction.payment.dto.PaymentDto;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public interface PaymentOperations {
+public interface PaymentController {
 
     @PostMapping
     PaymentDto createPayment(@RequestBody @NotNull @Valid OrderDto order);

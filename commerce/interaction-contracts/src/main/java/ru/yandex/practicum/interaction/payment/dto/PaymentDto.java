@@ -12,11 +12,11 @@ import java.util.UUID;
 @Getter
 public class PaymentDto {
 
-    UUID paymentId;
-    UUID orderId;
-    Double totalPayment;
-    Double deliveryTotal;
-    Double feeTotal;
-    PaymentState paymentState;
+    private UUID paymentId;
+    private UUID orderId;
+    private Double totalPayment;
+    private Double deliveryTotal;
+    private Double feeTotal;
+    private PaymentState paymentState;
 
 }

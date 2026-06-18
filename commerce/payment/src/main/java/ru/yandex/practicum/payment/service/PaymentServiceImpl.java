@@ -21,7 +21,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
-    private final BigDecimal TAX_RATE = new BigDecimal("0.1");
+    private static final BigDecimal TAX_RATE = new BigDecimal("0.1");
 
     private final PaymentRepository repository;
     private final PaymentMapper mapper;

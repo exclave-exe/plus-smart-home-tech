@@ -17,23 +17,23 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "payment_id")
-    UUID paymentId;
+    private UUID paymentId;
 
     @Column(name = "order_id")
-    UUID orderId;
+    private UUID orderId;
 
     @Column(name = "total_payment")
-    BigDecimal totalPayment;
+    private BigDecimal totalPayment;
 
     @Column(name = "delivery_total")
-    BigDecimal deliveryTotal;
+    private BigDecimal deliveryTotal;
 
     @Column(name = "fee_total")
-    BigDecimal feeTotal;
+    private BigDecimal feeTotal;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_state")
-    PaymentState paymentState;
+    private PaymentState paymentState;
 
 
 }

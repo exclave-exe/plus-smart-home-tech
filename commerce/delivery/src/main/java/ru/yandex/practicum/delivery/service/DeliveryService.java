@@ -1,7 +1,5 @@
 package ru.yandex.practicum.delivery.service;
 
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.interaction.delivery.dto.DeliveryDto;
 import ru.yandex.practicum.interaction.order.dto.OrderDto;
 
@@ -10,13 +8,13 @@ import java.util.UUID;
 
 public interface DeliveryService {
 
-    DeliveryDto createDelivery(@RequestBody @Valid DeliveryDto delivery);
+    DeliveryDto createDelivery(DeliveryDto delivery);
 
-    DeliveryDto successfulDelivery(@RequestBody UUID deliveryId);
+    DeliveryDto successfulDelivery(UUID deliveryId);
 
-    DeliveryDto failedDelivery(@RequestBody UUID deliveryId);
+    DeliveryDto failedDelivery(UUID deliveryId);
 
-    BigDecimal costDelivery(@RequestBody @Valid OrderDto order);
+    BigDecimal costDelivery(OrderDto order);
 
-    DeliveryDto pickedDelivery(@RequestBody UUID deliveryId);
+    DeliveryDto pickedDelivery(UUID deliveryId);
 }

@@ -16,18 +16,18 @@ public class Delivery {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "delivery_id")
-    UUID deliveryId;
+    private UUID deliveryId;
 
     @ManyToOne
     @JoinColumn(name = "from_address_id", referencedColumnName = "address_id")
-    Address fromAddress;
+    private Address fromAddress;
 
     @ManyToOne
     @JoinColumn(name = "to_address_id", referencedColumnName = "address_id")
-    Address toAddress;
+    private Address toAddress;
 
-    UUID orderId;
+    private UUID orderId;
 
     @Enumerated(EnumType.STRING)
-    DeliveryState deliveryState;
+    private DeliveryState deliveryState;
 }

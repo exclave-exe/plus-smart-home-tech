@@ -13,33 +13,26 @@ import ru.yandex.practicum.interaction.warehouse.dto.*;
 import java.util.Map;
 import java.util.UUID;
 
-public interface WarehouseOperations {
+public interface WarehouseController {
 
-    // Добавить новый товар на склад
     @PutMapping
     void addProduct(@RequestBody @NotNull @Valid NewProductInWarehouseRequest request);
 
-    // Принять товар на склад.
     @PostMapping("/add")
     void addQuantity(@RequestBody @NotNull @Valid AddProductToWarehouseRequest request);
 
-    // Проверить что количество товаров на складе достаточно
     @PostMapping("/check")
     BookedProductsDto checkQuantity(@RequestBody @NotNull @Valid CartDto cartDto);
 
-    // Предоставить адрес склада для расчёта доставки
     @GetMapping("/address")
     AddressDto getWarehouseAddress();
 
-    // Собрать товары к заказу для подготовки к отправке.
     @PostMapping("/assembly")
     BookedProductsDto assemblyProducts(@RequestBody @Valid AssemblyProductsForOrderRequest request);
 
-    // Передать товары в доставку
     @PostMapping("/shipped")
     void shippedProducts(@RequestBody @Valid ShippedToDeliveryRequest request);
 
-    // Принять возврат товаров на склад
     @PostMapping("/return")
     void returnProducts(@RequestBody Map<UUID, Long> products);
 
