@@ -10,12 +10,16 @@ import ru.yandex.practicum.interaction.store.dto.ProductDto;
 import ru.yandex.practicum.interaction.store.enums.ProductCategory;
 import ru.yandex.practicum.interaction.store.enums.QuantityState;
 
+import java.util.List;
 import java.util.UUID;
 
-public interface ShoppingStoreOperations {
+public interface ShoppingStoreController {
 
     @GetMapping("/{productId}")
     ProductDto getProduct(@PathVariable UUID productId);
+
+    @PostMapping("/products/batch")
+    List<ProductDto> getProductsByIds(@RequestBody List<UUID> ids);
 
     @GetMapping
     Page<ProductDto> getProductsByCategory(

@@ -62,6 +62,9 @@ services:
         PGPASSWORD=123 psql -h postgres -U user -d test -c 'CREATE DATABASE shopping_store_db;';
         PGPASSWORD=123 psql -h postgres -U user -d test -c 'CREATE DATABASE shopping_cart_db;';
         PGPASSWORD=123 psql -h postgres -U user -d test -c 'CREATE DATABASE warehouse_db;';
+        PGPASSWORD=123 psql -h postgres -U user -d test -c 'CREATE DATABASE payment_db;';
+        PGPASSWORD=123 psql -h postgres -U user -d test -c 'CREATE DATABASE order_db;';
+        PGPASSWORD=123 psql -h postgres -U user -d test -c 'CREATE DATABASE delivery_db;';
         echo 'Базы данных созданы.'
       "
     init: true

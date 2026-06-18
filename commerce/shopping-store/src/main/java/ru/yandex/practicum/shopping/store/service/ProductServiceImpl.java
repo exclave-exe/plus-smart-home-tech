@@ -15,7 +15,9 @@ import ru.yandex.practicum.shopping.store.mapper.ProductMapper;
 import ru.yandex.practicum.shopping.store.model.Product;
 import ru.yandex.practicum.shopping.store.repository.ProductRepository;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +41,15 @@ public class ProductServiceImpl implements ProductService {
         Product product = repository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Товар не найден: " + productId));
         return mapper.toDto(product);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductDto> getProductsByIds(List<UUID> ids) {
+        List<Product> products = repository.findByProductIdIn(ids);
+        if (products.isEmpty()) throw new ProductNotFoundException("Товары не найдены");
+
+        return products.stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     @Override
